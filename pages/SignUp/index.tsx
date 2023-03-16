@@ -1,13 +1,36 @@
+import api from "@/Components/Library/apiClient";
 import { Button, TextInputField } from "evergreen-ui";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useMutation } from "react-query";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
 export default function SignUp() {
   const router = useRouter();
 
+  const successToast = () => toast.success("Successfully logged in");
+
   const routeHandler = () => {
     router.push("/LogIn");
   };
+
+  const createUserHandler = useMutation(
+    (data: any) =>
+      api.post("/user/signup", {
+        username: data.name,
+        email: data.email,
+        password: data.password,
+      }),
+    {
+      onSuccess(data, variables, context) {
+        if (data.status == 201) {
+          successToast();
+          router.push("/");
+        }
+      },
+    }
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -16,7 +39,7 @@ export default function SignUp() {
       password: "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      createUserHandler.mutate(values);
     },
     validationSchema: yup.object({
       name: yup
@@ -33,6 +56,7 @@ export default function SignUp() {
 
   return (
     <div className="w-full bg-[#5865F2] flex justify-center  items-center h-[100vh]">
+      <ToastContainer position="top-right" />
       <form
         onSubmit={formik.handleSubmit}
         className="bg-gray-800 w-[35rem] rounded-lg px-7 py-9 text-white"
@@ -70,7 +94,7 @@ export default function SignUp() {
           )}
         </div>
 
-        <div className="mb-5">
+        <div className="mb-10">
           <TextInputField
             label="Password :"
             className="!bg-inherit !h-12 !text-base  !text-white"
