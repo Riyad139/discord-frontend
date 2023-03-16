@@ -1,34 +1,77 @@
 import { Button, TextInputField } from "evergreen-ui";
+import { useFormik } from "formik";
 import { useRouter } from "next/router";
-
+import * as yup from "yup";
 export default function LogIn() {
   const router = useRouter();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+    validationSchema: yup.object({
+      email: yup.string().email("enter a valid email").required(),
+      password: yup
+        .string()
+        .min(6, "enter a password atlest 6 characters")
+        .required(),
+    }),
+  });
+
+  const error = formik.errors;
+
+  console.log(error);
+
   const routeHandler = () => {
     router.push("/SignUp");
   };
   return (
     <div className="w-full bg-[#5865F2] flex justify-center  items-center h-[100vh]">
-      <form className="bg-gray-800 w-[35rem] rounded-lg px-7 py-9 text-white">
-        <div>
+      <form
+        onSubmit={formik.handleSubmit}
+        className="bg-gray-800 w-[35rem] rounded-lg px-7 py-9 text-white"
+      >
+        <div className="mb-4">
           <TextInputField
             className="!bg-inherit !h-12 !text-base  !text-white"
             label="Email :"
             type={"email"}
+            name="email"
+            marginBottom={5}
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.email}
             placeholder="your@example.com"
           />
+          {formik.errors.email && (
+            <p className="text-xs text-red-700">{formik.errors.email}</p>
+          )}
         </div>
 
-        <div>
+        <div className="mb-9">
           <TextInputField
             label="Password :"
             className="!bg-inherit !h-12 !text-base  !text-white"
             type={"password"}
+            name="password"
+            onBlur={formik.handleBlur}
+            marginBottom={5}
+            onChange={formik.handleChange}
+            value={formik.values.password}
             placeholder="*** **** ***"
           />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-xs text-red-700">{formik.errors.password}</p>
+          )}
         </div>
         <div className="mt-2 space-y-5">
           <Button
             marginRight={16}
+            type={"submit"}
             className="!w-full !text-base !h-9"
             appearance="primary"
           >
