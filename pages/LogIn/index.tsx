@@ -1,9 +1,20 @@
+import api from "@/Components/Library/apiClient";
 import { Button, TextInputField } from "evergreen-ui";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+import { useMutation } from "react-query";
 import * as yup from "yup";
 export default function LogIn() {
   const router = useRouter();
+
+  const signIngHandler = useMutation(
+    (data: any) => api.post("/user/login", { data }),
+    {
+      onSuccess(data, variables, context) {
+        if (data.status == 200) router.push("/");
+      },
+    }
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -11,7 +22,7 @@ export default function LogIn() {
       password: "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      signIngHandler.mutate(values);
     },
     validationSchema: yup.object({
       email: yup.string().email("enter a valid email").required(),
@@ -21,10 +32,6 @@ export default function LogIn() {
         .required(),
     }),
   });
-
-  const error = formik.errors;
-
-  console.log(error);
 
   const routeHandler = () => {
     router.push("/SignUp");
