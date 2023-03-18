@@ -6,7 +6,16 @@ module.exports = {
   ],
 
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        lightGray: "#424549",
+        mediumGray: "#36393e",
+        mediumDark: "#282b30",
+        dark: "#1e2124",
+        lightBluish: "#7289da",
+        mediumBluish: "#5865F2",
+      },
+    },
   },
   plugins: [],
 };
