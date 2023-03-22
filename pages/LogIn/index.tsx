@@ -1,28 +1,29 @@
+import { IState } from "@/@types/IState";
+import { signIn } from "@/Components/app/authSlice";
 import api from "@/Components/Library/apiClient";
 import { Button, TextInputField } from "evergreen-ui";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
+
 export default function LogIn() {
   const router = useRouter();
-
-  const signIngHandler = useMutation(
-    (data: any) => api.post("/user/login", { data }),
-    {
-      onSuccess(data, variables, context) {
-        if (data.status == 200) router.push("/");
-      },
-    }
-  );
-
+  const { user, loading, error } = useSelector((state: IState) => state.Auth);
+  const dispatch = useDispatch();
+  const signIngHandler = (data: any) => {
+    //@ts-ignore
+    dispatch(signIn(data));
+  };
+  console.log(user);
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      signIngHandler.mutate(values);
+      signIngHandler(values);
     },
     validationSchema: yup.object({
       email: yup.string().email("enter a valid email").required(),
@@ -36,6 +37,11 @@ export default function LogIn() {
   const routeHandler = () => {
     router.push("/SignUp");
   };
+
+  if (user && !loading) {
+    router.push("/");
+  }
+
   return (
     <div className="w-full bg-[#5865F2] flex justify-center  items-center h-[100vh]">
       <form
