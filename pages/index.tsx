@@ -1,7 +1,23 @@
+import { IState } from "@/@types/IState";
+import { signIn, signinUsingToken } from "@/Components/app/authSlice";
 import SideBar from "@/Components/SideBar";
 import SeceondarySideBar from "@/Components/SideBar/SecondarySideBar";
+import connetWithSocketIo from "@/socketIOClient/connectWithSocketIo";
+import { useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
 export default function Home() {
+  const user = useSelector((state: IState) => state.Auth.user);
+  console.log(user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!user) {
+      //@ts-ignore
+      dispatch(signinUsingToken());
+    }
+    if (user) connetWithSocketIo(user);
+  }, [user]);
+
   return (
     <div className=" flex h-[100vh]">
       <div className="h-full w-20 ">

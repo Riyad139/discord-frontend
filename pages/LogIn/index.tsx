@@ -16,7 +16,7 @@ export default function LogIn() {
     //@ts-ignore
     dispatch(signIn(data));
   };
-  console.log(user);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -50,7 +50,7 @@ export default function LogIn() {
       >
         <div className="mb-4">
           <TextInputField
-            className="!bg-inherit !h-12 !text-base  !text-white"
+            className="!bg-mediumDark  !h-12 !text-base  !text-white"
             label="Email :"
             type={"email"}
             name="email"
