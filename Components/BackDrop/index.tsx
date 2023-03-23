@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 export default function BackDrop(props: {
   open: boolean;
   handleClose: any;
-  Children: any;
+  Component: any;
 }) {
   return (
     <Modal
@@ -14,7 +14,7 @@ export default function BackDrop(props: {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      {props.Children}
+      {props.Component}
     </Modal>
   );
 }
