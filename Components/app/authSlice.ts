@@ -1,3 +1,4 @@
+import { IUser } from "@/@types/IUser";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import api from "../Library/apiClient";
@@ -12,13 +13,21 @@ export const signinUsingToken = createAsyncThunk("auth/reuser", async () => {
   return res.data;
 });
 
+interface Iinit {
+  loading: boolean;
+  user: IUser | null;
+  error: string;
+}
+
+const initState: Iinit = {
+  loading: false,
+  user: null,
+  error: "",
+};
+
 const AuthSlice = createSlice({
   name: "auth",
-  initialState: {
-    loading: false,
-    user: null,
-    error: "",
-  },
+  initialState: initState,
   extraReducers: (builder) => {
     builder.addCase(signIn.pending, (state) => {
       state.loading = true;
