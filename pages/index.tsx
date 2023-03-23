@@ -8,14 +8,15 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 export default function Home() {
   const user = useSelector((state: IState) => state.Auth.user);
-  console.log(user);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!user) {
       //@ts-ignore
       dispatch(signinUsingToken());
     }
-    if (user) connetWithSocketIo(user);
+    if (user) {
+      connetWithSocketIo(user);
+    }
   }, [user]);
 
   return (
