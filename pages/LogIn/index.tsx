@@ -1,19 +1,17 @@
 import { IState } from "@/@types/IState";
 import { signIn } from "@/Components/app/authSlice";
-import api from "@/Components/Library/apiClient";
 import { Button, TextInputField } from "evergreen-ui";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 import * as yup from "yup";
 
 export default function LogIn() {
   const router = useRouter();
   const { user, loading, error } = useSelector((state: IState) => state.Auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   const signIngHandler = (data: any) => {
-    //@ts-ignore
     dispatch(signIn(data));
   };
 

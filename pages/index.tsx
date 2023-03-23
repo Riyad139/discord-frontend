@@ -1,17 +1,17 @@
 import { IState } from "@/@types/IState";
-import { signIn, signinUsingToken } from "@/Components/app/authSlice";
+import { signinUsingToken } from "@/Components/app/authSlice";
 import SideBar from "@/Components/SideBar";
 import SeceondarySideBar from "@/Components/SideBar/SecondarySideBar";
 import connetWithSocketIo from "@/socketIOClient/connectWithSocketIo";
 import { useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 export default function Home() {
   const user = useSelector((state: IState) => state.Auth.user);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   useEffect(() => {
     if (!user) {
-      //@ts-ignore
       dispatch(signinUsingToken());
     }
     if (user) {
