@@ -1,6 +1,6 @@
 import { IUser } from "@/@types/IUser";
 import { Avatar, Badge, styled } from "@mui/material";
-
+import { BsCheck2, BsXLg } from "react-icons/bs";
 function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -26,7 +26,13 @@ function stringAvatar(name: string) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: `${
+      name.split(" ").length > 1 ? name.split(" ")[0][0] : name.charAt(0)
+    }${
+      name.split(" ").length > 1
+        ? name.split(" ")[1][0]
+        : name.charAt(name.length - 1)
+    }`,
   };
 }
 
@@ -59,18 +65,29 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function User(user: IUser) {
+export default function UserBox(props: { user: any; inviteUser: boolean }) {
   return (
-    <div className="flex w-full items-center gap-x-3">
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot"
-      >
-        <Avatar {...stringAvatar(user.name)} />
-      </StyledBadge>
+    <div className="flex w-full justify-between items-center ">
+      <div className="flex items-center gap-x-2">
+        {!props.inviteUser && (
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar {...stringAvatar(props.user.username)} />
+          </StyledBadge>
+        )}
+        {props.inviteUser && <Avatar {...stringAvatar(props.user.username)} />}
 
-      <p className="text-base text-gray-200">{user.name}</p>
+        <p className="text-sm text-gray-200">{props.user.username}</p>
+      </div>
+      {props.inviteUser && (
+        <div className="text-gray-200 gap-x-2 flex">
+          <BsCheck2 size={23} />
+          <BsXLg size={21} />
+        </div>
+      )}
     </div>
   );
 }
