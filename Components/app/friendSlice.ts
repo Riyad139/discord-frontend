@@ -1,16 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../Library/apiClient";
 
+interface IFriend {
+  _id: string;
+  username: string;
+  email: string;
+}
+
 interface IInitFriend {
   friend: string[];
   onlineFriend: string[];
-  invitation: string[];
+  pendingInvitations: string[];
+  IncommingInvitations: IFriend[];
 }
 
 const initState: IInitFriend = {
   friend: [],
   onlineFriend: [],
-  invitation: [],
+  pendingInvitations: [],
+  IncommingInvitations: [],
 };
 
 interface Ipayload {
@@ -35,14 +43,22 @@ const friendReducer = createSlice({
   initialState: initState,
   extraReducers: (builder) => {
     builder.addCase(sendFriendInvation.fulfilled, (state, action) => {
-      state.invitation.push(action.payload.data);
+      state.pendingInvitations.push(action.payload.data);
       action.payload.closeHandler();
     });
     builder.addCase(sendFriendInvation.rejected, (state, action) => {
-      console.log(action.error.message);
+      console.log(action.error);
     });
   },
-  reducers: {},
+  reducers: {
+    addFriendRequest(state, action) {
+      action.payload.forEach((obj: any) => {
+        state.IncommingInvitations.push(obj.Sender);
+      });
+    },
+  },
 });
+
+export const { addFriendRequest } = friendReducer.actions;
 
 export default friendReducer.reducer;

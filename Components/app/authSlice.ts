@@ -52,8 +52,8 @@ const AuthSlice = createSlice({
       state.error = action.error.message || "";
     });
   },
-  //@ts-ignore
-  reducers: undefined,
+
+  reducers: {},
 });
 
 export default AuthSlice.reducer;
