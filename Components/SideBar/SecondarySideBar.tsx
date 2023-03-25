@@ -1,4 +1,5 @@
 import { IState } from "@/@types/IState";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import {
@@ -30,8 +31,9 @@ export default function SeceondarySideBar() {
   const inviteUser = useSelector(
     (state: IState) => state.friend.IncommingInvitations
   );
+  const onLine = useSelector((state: IState) => state.friend.onlineFriend);
   const friends = useSelector((state: IState) => state.friend.friend);
-  
+
   const disPatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const rejectHandler = (id: string) => {
@@ -42,6 +44,13 @@ export default function SeceondarySideBar() {
     const data = { requestId: id };
     disPatch(acceptFriendRequest(data));
   };
+
+  const onlineUser = useMemo(() => {
+    const map = new Map();
+    onLine?.forEach((id) => map.set(id, "online"));
+    return map;
+  }, [onLine]);
+
   return (
     <div className="h-full flex justify-between flex-col items-center bg-mediumDark px-3">
       <div className="w-full text-center">
@@ -52,6 +61,7 @@ export default function SeceondarySideBar() {
             <UserBox
               key={us._id}
               user={us}
+              onlineUser={onlineUser}
               invitation={null}
               inviteUser={false}
               rejectHandler={rejectHandler}
@@ -68,6 +78,7 @@ export default function SeceondarySideBar() {
               key={IN._id + "ad"}
               user={null}
               invitation={IN}
+              onlineUser={onlineUser}
               inviteUser={true}
               rejectHandler={rejectHandler}
               acceptHandler={acceptHandler}

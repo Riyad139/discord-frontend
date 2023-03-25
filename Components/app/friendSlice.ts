@@ -91,11 +91,14 @@ const friendReducer = createSlice({
     },
     addFriendList(state, action) {
       state.friend = action.payload;
-      console.log("ok working");
+    },
+    addFriendToOnline(state, action) {
+      state.onlineFriend = action.payload;
     },
   },
 });
 
-export const { addFriendRequest, addFriendList } = friendReducer.actions;
+export const { addFriendRequest, addFriendList, addFriendToOnline } =
+  friendReducer.actions;
 
 export default friendReducer.reducer;

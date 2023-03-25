@@ -10,7 +10,6 @@ import { IState } from "@/@types/IState";
 export default function AddFriend() {
   const [open, setOpen] = useState(false);
   const handlerClose = () => setOpen(false);
-  const invited = useSelector((state: IState) => console.log(state.friend));
   const email = useRef<HTMLInputElement | null>();
 
   const Dispatch = useDispatch<ThunkDispatch<any, any, any>>();

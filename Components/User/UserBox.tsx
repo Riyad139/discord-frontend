@@ -41,7 +41,7 @@ function stringAvatar(name: string) {
   };
 }
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const OnlineStyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
     backgroundColor: "#44b700",
     color: "#44b700",
@@ -53,19 +53,27 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
       width: "100%",
       height: "100%",
       borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
+
+      border: "0.5px solid currentColor",
       content: '""',
     },
   },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1,
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0,
+}));
+const OfflineStyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: "#5A5A5A",
+    color: "#5A5A5A",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+
+      border: "0.5px solid currentColor",
+      content: '""',
     },
   },
 }));
@@ -76,6 +84,7 @@ export default function UserBox(props: {
   inviteUser: boolean;
   rejectHandler: any;
   acceptHandler: any;
+  onlineUser: Map<string, string>;
 }) {
   const reject = () => {
     props.rejectHandler(props.invitation?._id);
@@ -83,19 +92,32 @@ export default function UserBox(props: {
   const accept = () => {
     props.acceptHandler(props.invitation?._id);
   };
-
   return (
     <div className="flex w-full justify-between items-center ">
       <div className="flex items-center gap-x-2">
-        {!props.inviteUser && props.user && (
-          <StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
-          >
-            <Avatar {...stringAvatar(props.user.username)} />
-          </StyledBadge>
-        )}
+        {!props.inviteUser &&
+          props.user &&
+          props.onlineUser.has(props.user._id) && (
+            <OnlineStyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar {...stringAvatar(props.user.username)} />
+            </OnlineStyledBadge>
+          )}
+        {!props.inviteUser &&
+          props.user &&
+          !props.onlineUser.has(props.user._id) && (
+            <OfflineStyledBadge
+              overlap="circular"
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar {...stringAvatar(props.user.username)} />
+            </OfflineStyledBadge>
+          )}
+
         {props.inviteUser && props.invitation && (
           <Avatar {...stringAvatar(props.invitation.Sender.username)} />
         )}
