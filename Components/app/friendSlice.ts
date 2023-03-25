@@ -6,12 +6,17 @@ interface IFriend {
   username: string;
   email: string;
 }
+export interface ICInvitation {
+  _id: string;
+  Recever: string;
+  Sender: IFriend;
+}
 
 interface IInitFriend {
   friend: string[];
   onlineFriend: string[];
   pendingInvitations: string[];
-  IncommingInvitations: IFriend[];
+  IncommingInvitations: ICInvitation[];
 }
 
 const initState: IInitFriend = {
@@ -31,10 +36,27 @@ export const sendFriendInvation = createAsyncThunk(
   async (payload: Ipayload) => {
     const { targetEmail, closeHandler } = payload;
     const res = await api.post("/friend/addFriend", { targetEmail });
+
     return {
       data: res.data,
       closeHandler,
     };
+  }
+);
+
+export const rejectFriendRequest = createAsyncThunk(
+  "friend/reject",
+  async (data: any) => {
+    const res = await api.post("/friend/reject", data);
+    return res;
+  }
+);
+
+export const acceptFriendRequest = createAsyncThunk(
+  "friend/accept",
+  async (data: any) => {
+    const res = await api.post("/friend/accept", data);
+    return res;
   }
 );
 
@@ -49,12 +71,20 @@ const friendReducer = createSlice({
     builder.addCase(sendFriendInvation.rejected, (state, action) => {
       console.log(action.error);
     });
+    builder.addCase(rejectFriendRequest.fulfilled, (state) => {
+      state.IncommingInvitations;
+    });
+    builder.addCase(rejectFriendRequest.rejected, (state) => {
+      alert("wrong");
+    });
+    builder.addCase(acceptFriendRequest.fulfilled, (state) => {});
+    builder.addCase(acceptFriendRequest.rejected, (state) => {
+      alert("wrong");
+    });
   },
   reducers: {
     addFriendRequest(state, action) {
-      action.payload.forEach((obj: any) => {
-        state.IncommingInvitations.push(obj.Sender);
-      });
+      state.IncommingInvitations = action.payload;
     },
   },
 });
