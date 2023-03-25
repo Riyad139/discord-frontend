@@ -1,3 +1,4 @@
+import { ICInvitation } from "@/Components/app/friendSlice";
 import { Reducer } from "@reduxjs/toolkit";
 import { IUser } from "./IUser";
 
@@ -7,6 +8,6 @@ export interface IState {
     friend: string[];
     invitation: string[];
     onlineFriend: string[];
-    IncommingInvitations: any;
+    IncommingInvitations: ICInvitation[];
   };
 }
