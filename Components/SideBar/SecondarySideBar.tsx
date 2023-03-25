@@ -30,9 +30,10 @@ export default function SeceondarySideBar() {
   const inviteUser = useSelector(
     (state: IState) => state.friend.IncommingInvitations
   );
+  const friends = useSelector((state: IState) => state.friend.friend);
+  
   const disPatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-  console.log("secondary", inviteUser);
   const rejectHandler = (id: string) => {
     const data = { requestId: id };
     disPatch(rejectFriendRequest(data));
@@ -47,9 +48,9 @@ export default function SeceondarySideBar() {
         <AddFriend />
         <p className="text-gray-300 text-sm uppercase ">Private messages</p>
         <div className="mt-7 w-full h-[31rem] overflow-auto space-y-4 ">
-          {users.map((us) => (
+          {friends.map((us) => (
             <UserBox
-              key={us.id}
+              key={us._id}
               user={us}
               invitation={null}
               inviteUser={false}

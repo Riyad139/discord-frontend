@@ -1,5 +1,5 @@
 import { IUser } from "@/@types/IUser";
-import { addFriendRequest } from "@/Components/app/friendSlice";
+import { addFriendList, addFriendRequest } from "@/Components/app/friendSlice";
 import store from "@/Components/app/store";
 import io from "socket.io-client";
 
@@ -11,13 +11,13 @@ const connetWithSocketIo = (user: IUser) => {
   });
 
   socket.on("connect", () => {
-    console.log("successfully connected");
-    console.log(socket.id);
+    console.log("connected");
   });
   socket.on("friend-request", (payload) => {
-    console.log("hello", payload.pendingRequest);
     store.dispatch(addFriendRequest(payload.pendingRequest));
-    console.log(payload.pendingRequest);
+  });
+  socket.on("friend-list", (payload) => {
+    store.dispatch(addFriendList(payload.payload));
   });
 };
 
