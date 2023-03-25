@@ -1,6 +1,11 @@
 import { IUser } from "@/@types/IUser";
 import { Avatar, Badge, styled } from "@mui/material";
 import { BsCheck2, BsXLg } from "react-icons/bs";
+import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import { ICInvitation, rejectFriendRequest } from "../app/friendSlice";
+import api from "../Library/apiClient";
 function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -65,11 +70,24 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function UserBox(props: { user: any; inviteUser: boolean }) {
+export default function UserBox(props: {
+  invitation: ICInvitation | null;
+  user: IUser | null;
+  inviteUser: boolean;
+  rejectHandler: any;
+  acceptHandler: any;
+}) {
+  const reject = () => {
+    props.rejectHandler(props.invitation?._id);
+  };
+  const accept = () => {
+    props.acceptHandler(props.invitation?._id);
+  };
+
   return (
     <div className="flex w-full justify-between items-center ">
       <div className="flex items-center gap-x-2">
-        {!props.inviteUser && (
+        {!props.inviteUser && props.user && (
           <StyledBadge
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -78,14 +96,24 @@ export default function UserBox(props: { user: any; inviteUser: boolean }) {
             <Avatar {...stringAvatar(props.user.username)} />
           </StyledBadge>
         )}
-        {props.inviteUser && <Avatar {...stringAvatar(props.user.username)} />}
+        {props.inviteUser && props.invitation && (
+          <Avatar {...stringAvatar(props.invitation.Sender.username)} />
+        )}
 
-        <p className="text-sm text-gray-200">{props.user.username}</p>
+        {props.inviteUser && props.invitation && (
+          <p className="text-sm text-gray-200">
+            {props.invitation.Sender.username}
+          </p>
+        )}
+
+        {!props.inviteUser && props.user && (
+          <p className="text-sm text-gray-200">{props.user.username}</p>
+        )}
       </div>
       {props.inviteUser && (
         <div className="text-gray-200 gap-x-2 flex">
-          <BsCheck2 size={23} />
-          <BsXLg size={21} />
+          <BsCheck2 onClick={accept} className="cursor-pointer" size={23} />
+          <BsXLg onClick={reject} className="cursor-pointer" size={21} />
         </div>
       )}
     </div>

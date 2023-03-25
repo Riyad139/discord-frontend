@@ -15,7 +15,7 @@ const connetWithSocketIo = (user: IUser) => {
     console.log(socket.id);
   });
   socket.on("friend-request", (payload) => {
-    console.log(payload.pendingRequest);
+    console.log("hello", payload.pendingRequest);
     store.dispatch(addFriendRequest(payload.pendingRequest));
     console.log(payload.pendingRequest);
   });
