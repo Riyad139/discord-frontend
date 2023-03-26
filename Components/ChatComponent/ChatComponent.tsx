@@ -1,58 +1,69 @@
 import { IState } from "@/@types/IState";
 import { IUser } from "@/@types/IUser";
-import { Avatar, TextField } from "@mui/material";
+import { Avatar } from "@mui/material";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 import { TextInput } from "evergreen-ui";
-import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { sendMessages } from "../app/chatSlice";
+import ChatBox from "./ChatBox";
 
-function stringToColor(string: string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = "#";
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${
-      name.split(" ").length > 1 ? name.split(" ")[0][0] : name.charAt(0)
-    }${
-      name.split(" ").length > 1
-        ? name.split(" ")[1][0]
-        : name.charAt(name.length - 1)
-    }`,
-  };
-}
+import { stringAvatar } from "./../User/UserBox";
 
 export default function ChatComponent(props: { userId: IUser }) {
+  const disPatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const content = useRef<HTMLInputElement>();
+  const messages = useSelector((state: IState) => state.chat.messages);
+
+  const scroll = useRef<null | HTMLElement>(null);
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+    console.log(scroll.current);
+    console.log(1);
+  }, [messages]);
+
+  const submitHandler = (event: any) => {
+    if (
+      event.key == "Enter" &&
+      content.current?.value &&
+      content.current?.value.length > 0
+    ) {
+      const data = {
+        reciverId: props.userId._id,
+        content: content.current.value,
+      };
+      disPatch(sendMessages(data));
+      content.current.value = "";
+    }
+  };
   return (
-    <div className="flex flex-col justify-between w-full px-5 py-9 h-full">
-      <div className="w-full flex items-center gap-4">
-        <Avatar
-          className="w-28 h-28 text-[30px] uppercase"
-          {...stringAvatar(props.userId.username)}
-        />
-        <p className="text-2xl">{props.userId.username}</p>
+    <div className="flex flex-col  justify-between w-full px-5 py-9 h-full">
+      <div className="w-full flex flex-col  gap-4">
+        <div className="flex items-center gap-3">
+          <Avatar
+            className="w-20 h-20 text-[30px] uppercase"
+            {...stringAvatar(props.userId.username)}
+          />
+          <p className="text-2xl">{props.userId.username}</p>
+        </div>
+        <div className="overflow-y-scroll h-[65vh]">
+          {(messages?.perticipant[0] == props.userId._id ||
+            messages?.perticipant[1] == props.userId._id) &&
+            messages.conversation.map((cv) => <ChatBox conversation={cv} />)}
+          <div
+            //@ts-ignore
+            ref={scroll}
+          />
+        </div>
       </div>
       <div>
         <TextInput
           width={"100%"}
           height={50}
+          //@ts-ignore
+          ref={content}
+          onKeyDown={submitHandler}
           border="none"
           className="!bg-[#525252] !px-5 !text-gray-300 !border-none focus:!shadow-none !focus:border-none  !rounded-full"
           placeholder={"Message @" + props.userId.username}
