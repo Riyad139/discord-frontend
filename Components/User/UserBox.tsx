@@ -1,13 +1,14 @@
 import { IUser } from "@/@types/IUser";
 import { Avatar, Badge, styled } from "@mui/material";
+import { useEffect } from "react";
 import { BsCheck2, BsXLg } from "react-icons/bs";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
-import { ThunkDispatch } from "redux-thunk";
-import { setChatDetails, setChatType } from "../app/chatSlice";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { sendChatHistory, setChatDetails, setChatType } from "../app/chatSlice";
 import { ICInvitation, rejectFriendRequest } from "../app/friendSlice";
 import api from "../Library/apiClient";
-function stringToColor(string: string) {
+export function stringToColor(string: string) {
   let hash = 0;
   let i;
 
@@ -27,7 +28,7 @@ function stringToColor(string: string) {
   return color;
 }
 
-function stringAvatar(name: string) {
+export function stringAvatar(name: string) {
   return {
     sx: {
       bgcolor: stringToColor(name),
@@ -93,11 +94,15 @@ export default function UserBox(props: {
   const accept = () => {
     props.acceptHandler(props.invitation?._id);
   };
-  const disPatch = useDispatch();
+  const disPatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const DirectChatHandler = () => {
     disPatch(setChatType({ type: "DIRECT" }));
     disPatch(setChatDetails({ id: props.user }));
+    const data = {
+      reciverId: props.user?._id,
+    };
+    disPatch(sendChatHistory(data));
   };
 
   return (

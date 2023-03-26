@@ -1,4 +1,5 @@
 import { IUser } from "@/@types/IUser";
+import { setChatMessages } from "@/Components/app/chatSlice";
 import {
   addFriendList,
   addFriendRequest,
@@ -23,6 +24,13 @@ const connetWithSocketIo = (user: IUser) => {
   });
   socket.on("online-user", (payload) => {
     store.dispatch(addFriendToOnline(payload.payload));
+  });
+
+  socket.on("direct-message", (payload) => {
+    store.dispatch(setChatMessages(payload.conversation));
+  });
+  socket.on("chat-history", (payload) => {
+    store.dispatch(setChatMessages(payload.conversation));
   });
 };
 
