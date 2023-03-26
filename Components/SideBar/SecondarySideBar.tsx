@@ -52,7 +52,7 @@ export default function SeceondarySideBar() {
   }, [onLine]);
 
   return (
-    <div className="h-full flex justify-between flex-col items-center bg-mediumDark px-3">
+    <div className="h-full flex justify-between flex-col items-center bg-mediumDark ">
       <div className="w-full text-center">
         <AddFriend />
         <p className="text-gray-300 text-sm uppercase ">Private messages</p>

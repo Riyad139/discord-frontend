@@ -4,6 +4,7 @@ import { BsCheck2, BsXLg } from "react-icons/bs";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
+import { setChatDetails, setChatType } from "../app/chatSlice";
 import { ICInvitation, rejectFriendRequest } from "../app/friendSlice";
 import api from "../Library/apiClient";
 function stringToColor(string: string) {
@@ -43,8 +44,8 @@ function stringAvatar(name: string) {
 
 const OnlineStyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
-    backgroundColor: "#44b700",
-    color: "#44b700",
+    backgroundColor: "#228B22",
+    color: "#228B22",
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
     "&::after": {
       position: "absolute",
@@ -61,9 +62,9 @@ const OnlineStyledBadge = styled(Badge)(({ theme }) => ({
 }));
 const OfflineStyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
-    backgroundColor: "#5A5A5A",
-    color: "#5A5A5A",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    backgroundColor: "#3B3B3B",
+    color: "#3B3B3B",
+    boxShadow: `0 0 0 3px #979797`,
     "&::after": {
       position: "absolute",
       top: 0,
@@ -72,7 +73,7 @@ const OfflineStyledBadge = styled(Badge)(({ theme }) => ({
       height: "100%",
       borderRadius: "50%",
 
-      border: "0.5px solid currentColor",
+      border: "px solid currentColor",
       content: '""',
     },
   },
@@ -92,8 +93,18 @@ export default function UserBox(props: {
   const accept = () => {
     props.acceptHandler(props.invitation?._id);
   };
+  const disPatch = useDispatch();
+
+  const DirectChatHandler = () => {
+    disPatch(setChatType({ type: "DIRECT" }));
+    disPatch(setChatDetails({ id: props.user }));
+  };
+
   return (
-    <div className="flex w-full justify-between items-center ">
+    <div
+      onClick={DirectChatHandler}
+      className="flex px-3 py-1 cursor-pointer hover:bg-dark w-full justify-between items-center "
+    >
       <div className="flex items-center gap-x-2">
         {!props.inviteUser &&
           props.user &&
