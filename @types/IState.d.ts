@@ -1,3 +1,4 @@
+import { IMessages } from "@/Components/app/chatSlice";
 import { ICInvitation } from "@/Components/app/friendSlice";
 import { Reducer } from "@reduxjs/toolkit";
 import { IUser } from "./IUser";
@@ -13,6 +14,6 @@ export interface IState {
   chat: {
     ChatType: string | null;
     ChatDetails: IUser | null;
-    messages: string[];
+    messages: IMessages | null;
   };
 }
