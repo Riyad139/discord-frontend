@@ -10,4 +10,9 @@ export interface IState {
     onlineFriend: string[];
     IncommingInvitations: ICInvitation[];
   };
+  chat: {
+    ChatType: string | null;
+    ChatDetails: IUser | null;
+    messages: string[];
+  };
 }
