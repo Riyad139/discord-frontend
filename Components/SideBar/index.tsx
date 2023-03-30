@@ -1,5 +1,6 @@
 import { Fab } from "@mui/material";
 import { MdGroups } from "react-icons/md";
+import CreateRoom from "../CreateRoom/CreateRoom";
 export default function () {
   return (
     <div className="bg-dark h-full flex flex-col items-center  ">
@@ -9,6 +10,7 @@ export default function () {
       >
         <MdGroups size={28} color="white" />
       </Fab>
+      <CreateRoom />
     </div>
   );
 }

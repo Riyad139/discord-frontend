@@ -47,7 +47,7 @@ export default function ChatComponent(props: { userId: IUser }) {
           />
           <p className="text-2xl">{props.userId.username}</p>
         </div>
-        <div className="overflow-y-scroll h-[65vh]">
+        <div className="overflow-auto h-[65vh]">
           {(messages?.perticipant[0] == props.userId._id ||
             messages?.perticipant[1] == props.userId._id) &&
             messages.conversation.map((cv) => <ChatBox conversation={cv} />)}
