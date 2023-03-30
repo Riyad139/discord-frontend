@@ -12,7 +12,7 @@ export interface IInitState {
   isScreensharingActive: boolean;
 }
 
-const initialState: IInitState = {
+export const initialStateRoom: IInitState = {
   isUserInRoom: false,
   isUserRoomCreator: false,
   roomDetails: null,
@@ -26,7 +26,7 @@ const initialState: IInitState = {
 
 const roomSlice = createSlice({
   name: "room",
-  initialState,
+  initialState: initialStateRoom,
   reducers: {
     createRoom(state) {
       state.isUserInRoom = true;
