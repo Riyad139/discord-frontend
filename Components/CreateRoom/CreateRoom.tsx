@@ -1,16 +1,25 @@
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { useDispatch } from "react-redux";
-import { createRoom } from "../app/roomSlice";
+import { useState } from "react";
+import BackDrop from "../BackDrop";
+import CreateRoomDialog from "./createRoomDialog";
 export default function CreateRoom() {
-  const disPatch = useDispatch();
-
+  const [isOpen, setOpen] = useState(false);
   const Handler = () => {
-    disPatch(createRoom());
+    setOpen(true);
+  };
+  const handlerClose = () => {
+    setOpen((val) => !val);
   };
 
   return (
     <div>
+      <BackDrop
+        open={isOpen}
+        handleClose={handlerClose}
+        Component={<CreateRoomDialog closeHandler={handlerClose} />}
+      />
+
       <Fab
         color="primary"
         onClick={Handler}

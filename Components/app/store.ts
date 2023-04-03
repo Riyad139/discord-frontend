@@ -6,7 +6,6 @@ import chatReducer from "./chatSlice";
 import roomReducer from "./roomSlice";
 const store = configureStore({
   reducer: {
-    //@ts-ignore
     Auth: AuthReducer,
     friend: friendReducer,
     chat: chatReducer,
