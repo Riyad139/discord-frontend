@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface IInitState {
   isUserInRoom: boolean;
   isUserRoomCreator: boolean;
-  roomDetails: null | string;
+  roomDetails: null | any[];
   activeRooms: any[];
   localStram: null | string;
   remoteStreams: any[];
@@ -32,9 +32,12 @@ const roomSlice = createSlice({
       state.isUserInRoom = true;
       state.isUserRoomCreator = true;
     },
+    setRoomDetails(state, actions) {
+      state.roomDetails = actions.payload;
+    },
   },
 });
 
-export const { createRoom } = roomSlice.actions;
+export const { createRoom, setRoomDetails } = roomSlice.actions;
 
 export default roomSlice.reducer;
