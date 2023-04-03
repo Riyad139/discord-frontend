@@ -1,13 +1,10 @@
 import { IUser } from "@/@types/IUser";
 import { Avatar, Badge, styled } from "@mui/material";
-import { useEffect } from "react";
 import { BsCheck2, BsXLg } from "react-icons/bs";
-import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { ThunkDispatch } from "redux-thunk";
 import { sendChatHistory, setChatDetails, setChatType } from "../app/chatSlice";
-import { ICInvitation, rejectFriendRequest } from "../app/friendSlice";
-import api from "../Library/apiClient";
+import { ICInvitation } from "../app/friendSlice";
 export function stringToColor(string: string) {
   let hash = 0;
   let i;

@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 export default function Home() {
   const user = useSelector((state: IState) => state.Auth.user);
-  const room = useSelector((state: IState) => state.room);
   const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
   useEffect(() => {
     if (!user) {

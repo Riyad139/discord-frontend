@@ -5,11 +5,12 @@ import {
   addFriendRequest,
   addFriendToOnline,
 } from "@/Components/app/friendSlice";
+import { setRoomDetails } from "@/Components/app/roomSlice";
 import store from "@/Components/app/store";
-import io from "socket.io-client";
-
+import io, { Socket } from "socket.io-client";
+let socket: Socket;
 const connetWithSocketIo = (user: IUser) => {
-  const socket = io(process.env.NEXT_PUBLIC_API as string, {
+  socket = io(process.env.NEXT_PUBLIC_API as string, {
     auth: {
       token: user.token,
     },
@@ -32,6 +33,20 @@ const connetWithSocketIo = (user: IUser) => {
   socket.on("chat-history", (payload) => {
     store.dispatch(setChatMessages(payload.conversation));
   });
+  socket.on("room-list", (payload) => {
+    store.dispatch(setRoomDetails(payload));
+  });
+  socket.on("active-room", (payload) => {
+    console.log(payload);
+  });
+};
+
+export const createRoomHandlerEmit = (payload: any) => {
+  socket.emit("create-room", payload);
+};
+
+export const joinRoomHanclerEmit = (payload: any) => {
+  socket.emit("join-room", payload);
 };
 
 export default connetWithSocketIo;

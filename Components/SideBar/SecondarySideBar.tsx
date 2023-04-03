@@ -10,23 +10,6 @@ import {
 import AddFriend from "../Invitation";
 import UserBox from "../User/UserBox";
 
-const users = [
-  {
-    username: "sanaullah sani",
-    id: "1",
-    token: "",
-    img: "",
-    email: "hoibo kisu ekta",
-  },
-  {
-    username: "Robin",
-    token: "",
-    img: "",
-    id: "2",
-    email: "hoibo kisu ekta",
-  },
-];
-
 export default function SeceondarySideBar() {
   const inviteUser = useSelector(
     (state: IState) => state.friend.IncommingInvitations
