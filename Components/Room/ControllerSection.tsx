@@ -6,6 +6,10 @@ import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dispatch, SetStateAction, useState } from "react";
+import { leaveRoomHandlerEmit } from "@/socketIOClient/connectWithSocketIo";
+import { useDispatch } from "react-redux";
+import { setMode } from "../app/roomSlice";
+import getLocalStream from "../utils/videoPreview";
 
 type IProps = {
   miniMizedhandler: Dispatch<SetStateAction<boolean>>;
@@ -13,8 +17,15 @@ type IProps = {
 };
 
 export default function ControllerSection({ miniMizedhandler, value }: IProps) {
-  const [isVideoEnable, setVideoEnable] = useState(false);
+  const [isVideoEnable, setVideoEnable] = useState(true);
   const [isMicEnable, setMicEnable] = useState(true);
+  const disPatch = useDispatch();
+
+  const handlerVideo = () => {
+    setVideoEnable((val) => !val);
+    disPatch(setMode(!isVideoEnable));
+    getLocalStream(undefined);
+  };
   return (
     <div className="w-full h-[10%] gap-5 flex items-center justify-center bg-mediumBluish">
       <div>
@@ -32,17 +43,11 @@ export default function ControllerSection({ miniMizedhandler, value }: IProps) {
         )}
       </div>
       <div>
-        {isVideoEnable && (
-          <VideocamIcon
-            className="cursor-pointer"
-            onClick={() => setVideoEnable((value) => !value)}
-          />
-        )}
         {!isVideoEnable && (
-          <VideocamOffIcon
-            className="cursor-pointer"
-            onClick={() => setVideoEnable((value) => !value)}
-          />
+          <VideocamIcon className="cursor-pointer" onClick={handlerVideo} />
+        )}
+        {isVideoEnable && (
+          <VideocamOffIcon className="cursor-pointer" onClick={handlerVideo} />
         )}
       </div>
       <div className="">
@@ -63,7 +68,7 @@ export default function ControllerSection({ miniMizedhandler, value }: IProps) {
           </div>
         )}
       </div>
-      <CloseIcon className="cursor-pointer" />
+      <CloseIcon onClick={leaveRoomHandlerEmit} className="cursor-pointer" />
     </div>
   );
 }
