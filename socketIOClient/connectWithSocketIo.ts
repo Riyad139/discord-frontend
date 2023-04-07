@@ -5,8 +5,16 @@ import {
   addFriendRequest,
   addFriendToOnline,
 } from "@/Components/app/friendSlice";
-import { setRoomDetails } from "@/Components/app/roomSlice";
+import {
+  createRoom,
+  joinRoom,
+  leaveRoom,
+  setActiveRoom,
+  setMode,
+  setRoomDetails,
+} from "@/Components/app/roomSlice";
 import store from "@/Components/app/store";
+import getLocalStream from "@/Components/utils/videoPreview";
 import io, { Socket } from "socket.io-client";
 let socket: Socket;
 const connetWithSocketIo = (user: IUser) => {
@@ -37,7 +45,7 @@ const connetWithSocketIo = (user: IUser) => {
     store.dispatch(setRoomDetails(payload));
   });
   socket.on("active-room", (payload) => {
-    console.log(payload);
+    store.dispatch(setActiveRoom(payload.activeUser));
   });
 };
 
@@ -45,8 +53,19 @@ export const createRoomHandlerEmit = (payload: any) => {
   socket.emit("create-room", payload);
 };
 
-export const joinRoomHanclerEmit = (payload: any) => {
-  socket.emit("join-room", payload);
+export const joinRoomHandlerEmit = (payload: any, mode: boolean) => {
+  leaveRoomHandlerEmit();
+  store.dispatch(setMode(mode));
+  const callBack = () => {
+    store.dispatch(joinRoom(mode));
+    socket.emit("join-room", payload);
+  };
+  getLocalStream(callBack);
+};
+
+export const leaveRoomHandlerEmit = () => {
+  store.dispatch(leaveRoom());
+  socket.emit("leave-room");
 };
 
 export default connetWithSocketIo;
