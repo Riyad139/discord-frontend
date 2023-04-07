@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRoom } from "../app/roomSlice";
 import InviteUser from "./inviteUser";
+import getLocalStream from "../utils/videoPreview";
 let invitedUser: string[] = [];
 export default function CreateRoomDialog(props: { closeHandler: any }) {
   const disPatch = useDispatch();
@@ -16,11 +17,16 @@ export default function CreateRoomDialog(props: { closeHandler: any }) {
     if (!roomName.current?.value.length || roomName.current?.value.length <= 1)
       return;
 
-    createRoomHandlerEmit({
-      name: roomName.current?.value,
-      invited: invitedUser,
-    });
-    disPatch(createRoom());
+    const callBack = () => {
+      createRoomHandlerEmit({
+        name: roomName.current?.value,
+        invited: invitedUser,
+      });
+      disPatch(createRoom());
+    };
+
+    getLocalStream(callBack);
+
     props.closeHandler(false);
   };
 

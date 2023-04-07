@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface IactiveRoom {
+  username: string;
+  email: string;
+}
+
 export interface IInitState {
   isUserInRoom: boolean;
   isUserRoomCreator: boolean;
   roomDetails: null | any[];
-  activeRooms: any[];
-  localStram: null | string;
+  activeRooms: IactiveRoom[];
+  localStram: any;
   remoteStreams: any[];
   audioOnly: boolean;
   screenSharingStream: null | string;
@@ -32,12 +37,49 @@ const roomSlice = createSlice({
       state.isUserInRoom = true;
       state.isUserRoomCreator = true;
     },
+    joinRoom(state, actions) {
+      state.audioOnly = actions.payload;
+      state.isUserInRoom = true;
+      console.log(actions.payload);
+    },
+
+    leaveRoom(state) {
+      state.isUserInRoom = false;
+      state.isUserRoomCreator = false;
+      if (state.localStram) {
+        state.localStram.getTracks().forEach((track: any) => {
+          track.stop();
+        });
+      }
+    },
     setRoomDetails(state, actions) {
       state.roomDetails = actions.payload;
+    },
+    setMode(state, actions) {
+      state.audioOnly = actions.payload;
+    },
+    setActiveRoom(state, actions) {
+      state.activeRooms = actions.payload;
+    },
+    setLocalStream(state, actions) {
+      if (state.localStram) {
+        state.localStram.getTracks().forEach((track: any) => {
+          track.stop();
+        });
+      }
+      state.localStram = actions.payload;
     },
   },
 });
 
-export const { createRoom, setRoomDetails } = roomSlice.actions;
+export const {
+  createRoom,
+  setRoomDetails,
+  setActiveRoom,
+  leaveRoom,
+  setLocalStream,
+  setMode,
+  joinRoom,
+} = roomSlice.actions;
 
 export default roomSlice.reducer;
