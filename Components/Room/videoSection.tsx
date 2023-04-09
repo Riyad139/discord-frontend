@@ -3,6 +3,7 @@ import { styled } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import UserWindow from "./UserWindow";
+import RemoteVideo from "./RemoteVideo";
 
 const widthSize = (length: number) => {
   if (length) return Math.floor(100 / length);
@@ -18,32 +19,28 @@ const VideoDiv = styled("video")({
 });
 
 export default function VideoSection() {
-  const activeUsers = useSelector((state: IState) => state.room.activeRooms);
-  const [width, setWidth] = useState(100);
-  const thisUser = useSelector((state: IState) => state.Auth.user.email);
+  const remoteStreams = useSelector(
+    (state: IState) => state.room.remoteStreams
+  );
   const localStream = useSelector((state: IState) => state.room.localStram);
   const videoRef = useRef<HTMLMediaElement>();
   useEffect(() => {
-    setWidth(widthSize(activeUsers.length));
     if (videoRef.current) {
       videoRef.current.srcObject = localStream;
       videoRef.current.onloadeddata = () => {
         videoRef.current?.play();
       };
     }
-  }, [activeUsers, localStream]);
+  }, [localStream]);
 
   return (
     <div className="h-[90%]  flex flex-wrap w-full">
       <div className="bg-gray-black w-1/2 h-full">
         <VideoDiv ref={videoRef} autoPlay muted={true} />
       </div>
-      {activeUsers.map(
-        (it) =>
-          it.email !== thisUser && (
-            <UserWindow width={activeUsers.length} name={it.username} />
-          )
-      )}
+      {remoteStreams.map((it, i) => (
+        <RemoteVideo key={"remoteStream___" + i} stream={it} />
+      ))}
     </div>
   );
 }
