@@ -14,6 +14,7 @@ import {
   setRoomDetails,
 } from "@/Components/app/roomSlice";
 import store from "@/Components/app/store";
+import getPeerSocketPrepare, { handleInCommingSignalingData } from "@/Components/utils/PeerConnection";
 import getLocalStream from "@/Components/utils/videoPreview";
 import io, { Socket } from "socket.io-client";
 let socket: Socket;
@@ -47,6 +48,18 @@ const connetWithSocketIo = (user: IUser) => {
   socket.on("active-room", (payload) => {
     store.dispatch(setActiveRoom(payload.activeUser));
   });
+  socket.on("conn-prepare", (payload) => {
+    const { connectedUserSocketId } = payload;
+    getPeerSocketPrepare(connectedUserSocketId, false);
+    socket.emit("conn-init", { connectedUserSocketId: connectedUserSocketId });
+  });
+  socket.on("conn-init", (data) => {
+    const { connectedUserSocketId } = data;
+    getPeerSocketPrepare(connectedUserSocketId, true);
+  });
+  socket.on("conn-signal", (data) => {
+    handleInCommingSignalingData(data)
+  });
 };
 
 export const createRoomHandlerEmit = (payload: any) => {
@@ -66,6 +79,10 @@ export const joinRoomHandlerEmit = (payload: any, mode: boolean) => {
 export const leaveRoomHandlerEmit = () => {
   store.dispatch(leaveRoom());
   socket.emit("leave-room");
+};
+
+export const sendPeerSignal = (data: any) => {
+  socket.emit("conn-signal", data);
 };
 
 export default connetWithSocketIo;
