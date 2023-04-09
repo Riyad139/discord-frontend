@@ -61,6 +61,9 @@ const roomSlice = createSlice({
     setActiveRoom(state, actions) {
       state.activeRooms = actions.payload;
     },
+    setRemoteStream(state, actions) {
+      state.remoteStreams = actions.payload;
+    },
     setLocalStream(state, actions) {
       if (state.localStram) {
         state.localStram.getTracks().forEach((track: any) => {
@@ -80,6 +83,7 @@ export const {
   setLocalStream,
   setMode,
   joinRoom,
+  setRemoteStream,
 } = roomSlice.actions;
 
 export default roomSlice.reducer;

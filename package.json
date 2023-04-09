@@ -38,6 +38,7 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
+    "@types/simple-peer": "^9.11.5",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"

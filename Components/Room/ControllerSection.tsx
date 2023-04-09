@@ -7,9 +7,10 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import CloseIcon from "@mui/icons-material/Close";
 import { Dispatch, SetStateAction, useState } from "react";
 import { leaveRoomHandlerEmit } from "@/socketIOClient/connectWithSocketIo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMode } from "../app/roomSlice";
 import getLocalStream from "../utils/videoPreview";
+import { IState } from "@/@types/IState";
 
 type IProps = {
   miniMizedhandler: Dispatch<SetStateAction<boolean>>;
@@ -19,12 +20,13 @@ type IProps = {
 export default function ControllerSection({ miniMizedhandler, value }: IProps) {
   const [isVideoEnable, setVideoEnable] = useState(true);
   const [isMicEnable, setMicEnable] = useState(true);
-  const disPatch = useDispatch();
 
+  const localStream = useSelector((state: IState) => state.room.localStram);
   const handlerVideo = () => {
+    localStream.getVideoTracks()[0].enabled = isVideoEnable;
     setVideoEnable((val) => !val);
-    disPatch(setMode(!isVideoEnable));
-    getLocalStream(undefined);
+
+    console.log(localStream.getVideoTracks());
   };
   return (
     <div className="w-full h-[10%] gap-5 flex items-center justify-center bg-mediumBluish">
