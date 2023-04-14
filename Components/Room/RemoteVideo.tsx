@@ -17,7 +17,12 @@ export default function RemoteVideo(stream: any) {
   }, [stream]);
   return (
     <div className="w-1/2 h-full">
-      <VideoDiv ref={videoRef} autoPlay muted={false} />
+      <VideoDiv
+        //@ts-ignore
+        ref={videoRef}
+        autoPlay
+        muted={false}
+      />
     </div>
   );
 }
