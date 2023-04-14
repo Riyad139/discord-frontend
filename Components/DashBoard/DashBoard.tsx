@@ -21,7 +21,7 @@ export default function DashBoard() {
         {!chatInfo.ChatType && !room.isUserInRoom && (
           <p>To start chating - selecet a converstion</p>
         )}
-        {chatInfo.ChatType && !room.isUserInRoom && chatInfo.ChatDetails && (
+        {chatInfo.ChatType && chatInfo.ChatDetails && (
           <ChatComponent userId={chatInfo.ChatDetails} />
         )}
         {room.isUserInRoom && <Room />}

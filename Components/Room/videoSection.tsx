@@ -41,9 +41,14 @@ export default function VideoSection() {
   }, [localStream, isScreenShare, screenShareStream]);
 
   return (
-    <div className="h-[90%]  flex flex-wrap w-full">
-      <div className="bg-gray-black w-1/2 h-full">
-        <VideoDiv ref={videoRef} autoPlay muted={true} />
+    <div className="h-[90%]  flex flex-col sm:flex-row sm:flex-wrap w-full">
+      <div className="bg-gray-black  w-full sm:w-1/2 sm:h-full h-1/2 ">
+        <VideoDiv
+          //@ts-ignore
+          ref={videoRef}
+          autoPlay
+          muted={true}
+        />
       </div>
       {remoteStreams.map((it, i) => (
         <RemoteVideo key={"remoteStream___" + i} stream={it} />
