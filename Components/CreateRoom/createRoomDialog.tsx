@@ -14,14 +14,15 @@ export default function CreateRoomDialog(props: { closeHandler: any }) {
   const roomName = useRef<HTMLInputElement>();
 
   const createRoomhandler = () => {
-    if (!roomName.current?.value.length || roomName.current?.value.length <= 1)
-      return;
+    const name = roomName.current?.value;
+    if (!name || !name.length || name.length <= 1) return;
 
     const callBack = () => {
       createRoomHandlerEmit({
-        name: roomName.current?.value,
+        name,
         invited: invitedUser,
       });
+
       disPatch(createRoom());
     };
 

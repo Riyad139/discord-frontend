@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { stopAllPeerConnection } from "../utils/PeerConnection";
 
 interface IactiveRoom {
   username: string;
@@ -13,8 +14,9 @@ export interface IInitState {
   localStram: any;
   remoteStreams: any[];
   audioOnly: boolean;
-  screenSharingStream: null | string;
+  screenSharingStream: any;
   isScreensharingActive: boolean;
+  sendStreamData: any;
 }
 
 export const initialStateRoom: IInitState = {
@@ -27,6 +29,7 @@ export const initialStateRoom: IInitState = {
   screenSharingStream: null,
   remoteStreams: [],
   isScreensharingActive: false,
+  sendStreamData: null,
 };
 
 const roomSlice = createSlice({
@@ -46,11 +49,20 @@ const roomSlice = createSlice({
     leaveRoom(state) {
       state.isUserInRoom = false;
       state.isUserRoomCreator = false;
+      state.isScreensharingActive = false;
+      state.screenSharingStream = null;
+      stopAllPeerConnection();
       if (state.localStram) {
         state.localStram.getTracks().forEach((track: any) => {
           track.stop();
         });
       }
+      if (state.screenSharingStream) {
+        state.screenSharingStream.getTracks().forEach((track: any) => {
+          track.stop();
+        });
+      }
+      state.remoteStreams = [];
     },
     setRoomDetails(state, actions) {
       state.roomDetails = actions.payload;
@@ -64,6 +76,10 @@ const roomSlice = createSlice({
     setRemoteStream(state, actions) {
       state.remoteStreams = actions.payload;
     },
+    setScreenShare(state, actions) {
+      state.isScreensharingActive = !state.isScreensharingActive;
+      state.screenSharingStream = actions.payload;
+    },
     setLocalStream(state, actions) {
       if (state.localStram) {
         state.localStram.getTracks().forEach((track: any) => {
@@ -71,6 +87,10 @@ const roomSlice = createSlice({
         });
       }
       state.localStram = actions.payload;
+      state.sendStreamData = actions.payload;
+    },
+    setSendData(state, actions) {
+      state.sendStreamData = actions.payload;
     },
   },
 });
@@ -84,6 +104,8 @@ export const {
   setMode,
   joinRoom,
   setRemoteStream,
+  setScreenShare,
+  setSendData,
 } = roomSlice.actions;
 
 export default roomSlice.reducer;
