@@ -14,7 +14,10 @@ import {
   setRoomDetails,
 } from "@/Components/app/roomSlice";
 import store from "@/Components/app/store";
-import getPeerSocketPrepare, { handleInCommingSignalingData } from "@/Components/utils/PeerConnection";
+import getPeerSocketPrepare, {
+  handleInCommingSignalingData,
+  removeSinglePeerConnection,
+} from "@/Components/utils/PeerConnection";
 import getLocalStream from "@/Components/utils/videoPreview";
 import io, { Socket } from "socket.io-client";
 let socket: Socket;
@@ -58,7 +61,12 @@ const connetWithSocketIo = (user: IUser) => {
     getPeerSocketPrepare(connectedUserSocketId, true);
   });
   socket.on("conn-signal", (data) => {
-    handleInCommingSignalingData(data)
+    handleInCommingSignalingData(data);
+  });
+  socket.on("remove-peer-connection", (data) => {
+    const { connUserSoc } = data;
+
+    removeSinglePeerConnection(connUserSoc);
   });
 };
 
