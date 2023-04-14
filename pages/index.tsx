@@ -24,17 +24,10 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className=" flex h-[100vh]">
-      <div className="h-full w-20 ">
-        <SideBar />
-      </div>
-      <div>
-        <SeceondarySideBar />
-      </div>
-      <div className="w-full h-full">
-        <NavBar />
-        <DashBoard />
-      </div>
+    <div className="flex h-[100vh] ">
+      <SideBar />
+      <SeceondarySideBar />
+      <DashBoard />
     </div>
   );
 }
