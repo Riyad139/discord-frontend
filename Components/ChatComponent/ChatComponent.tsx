@@ -58,7 +58,16 @@ export default function ChatComponent(props: { userId: IUser }) {
         </div>
       </div>
 
-      <TextInput />
+      <TextInput
+        width={"100%"}
+        height={50}
+        //@ts-ignore
+        ref={content}
+        onKeyDown={submitHandler}
+        border="none"
+        className="!bg-[#525252] !px-5 !text-gray-300 !border-none focus:!shadow-none !focus:border-none  !rounded-full"
+        placeholder={"Message @" + props.userId.username}
+      />
     </div>
   );
 }
