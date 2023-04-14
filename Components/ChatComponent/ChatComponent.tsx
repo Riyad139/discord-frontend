@@ -38,8 +38,8 @@ export default function ChatComponent(props: { userId: IUser }) {
     }
   };
   return (
-    <div className="flex flex-col  justify-between w-full px-5 py-9 h-full">
-      <div className="w-full flex flex-col  gap-4">
+    <div className="flex flex-col    w-full px-5 py-9 h-full">
+      <div className="w-full flex mb-auto flex-col  gap-4">
         <div className="flex items-center gap-3">
           <Avatar
             className="w-20 h-20 text-[30px] uppercase"
@@ -47,7 +47,7 @@ export default function ChatComponent(props: { userId: IUser }) {
           />
           <p className="text-2xl">{props.userId.username}</p>
         </div>
-        <div className="overflow-auto h-[65vh]">
+        <div className="overflow-auto ">
           {(messages?.perticipant[0] == props.userId._id ||
             messages?.perticipant[1] == props.userId._id) &&
             messages.conversation.map((cv) => <ChatBox conversation={cv} />)}
@@ -57,18 +57,8 @@ export default function ChatComponent(props: { userId: IUser }) {
           />
         </div>
       </div>
-      <div>
-        <TextInput
-          width={"100%"}
-          height={50}
-          //@ts-ignore
-          ref={content}
-          onKeyDown={submitHandler}
-          border="none"
-          className="!bg-[#525252] !px-5 !text-gray-300 !border-none focus:!shadow-none !focus:border-none  !rounded-full"
-          placeholder={"Message @" + props.userId.username}
-        />
-      </div>
+
+      <TextInput />
     </div>
   );
 }
