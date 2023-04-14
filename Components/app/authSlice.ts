@@ -16,13 +16,13 @@ export const signinUsingToken = createAsyncThunk("auth/reuser", async () => {
 interface Iinit {
   loading: boolean;
   user: IUser | null;
-  error: string;
+  error: any;
 }
 
 const initState: Iinit = {
   loading: false,
   user: null,
-  error: "",
+  error: null,
 };
 
 const AuthSlice = createSlice({
@@ -49,7 +49,7 @@ const AuthSlice = createSlice({
     });
     builder.addCase(signinUsingToken.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message || "";
+      state.error = action.error.message || "error";
     });
   },
 
