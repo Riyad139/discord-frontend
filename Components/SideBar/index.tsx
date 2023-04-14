@@ -9,7 +9,7 @@ export default function () {
   const rooms = useSelector((state: IState) => state.room.roomDetails);
 
   return (
-    <div className="bg-dark overflow-auto h-full flex flex-col items-center  ">
+    <div className="bg-dark overflow-auto w-28 sm:w-20 h-full flex flex-col items-center  ">
       <Fab
         className=" bg-mediumBluish bg-blue rounded-2xl z-0 hover:bg-mediumBluish mt-3 mr-2 w-14 h-14 "
         aria-label="add"
@@ -25,7 +25,9 @@ export default function () {
           aria-label="add"
         >
           <p className="text-white text-lg">
-            {it.name[0] + "" + it.name[it.name.length - 1]}
+            {it.name &&
+              it.name.length > 2 &&
+              it.name[0] + "" + it.name[it.name.length - 1]}
           </p>
         </Fab>
       ))}

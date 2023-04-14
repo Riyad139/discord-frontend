@@ -9,6 +9,7 @@ import {
 } from "../app/friendSlice";
 import AddFriend from "../Invitation";
 import UserBox from "../User/UserBox";
+import classNames from "classnames";
 
 export default function SeceondarySideBar() {
   const inviteUser = useSelector(
@@ -16,7 +17,7 @@ export default function SeceondarySideBar() {
   );
   const onLine = useSelector((state: IState) => state.friend.onlineFriend);
   const friends = useSelector((state: IState) => state.friend.friend);
-
+  const isInChat = useSelector((state: IState) => state.chat.ChatType);
   const disPatch = useDispatch<ThunkDispatch<any, any, any>>();
 
   const rejectHandler = (id: string) => {
@@ -35,11 +36,16 @@ export default function SeceondarySideBar() {
   }, [onLine]);
 
   return (
-    <div className="h-full flex justify-between flex-col items-center bg-mediumDark ">
-      <div className="w-full text-center">
+    <div
+      className={classNames(
+        "h-full w-full sm:w-56  justify-between flex-col items-center bg-mediumDark ",
+        isInChat ? "hidden sm:flex" : "flex"
+      )}
+    >
+      <div className="w-full text-center h-[80%]">
         <AddFriend />
         <p className="text-gray-300 text-sm uppercase ">Private messages</p>
-        <div className="mt-7 w-full h-[31rem] overflow-auto space-y-4 ">
+        <div className="mt-7 w-full  overflow-auto space-y-4 ">
           {friends.map((us) => (
             <UserBox
               key={us._id}
@@ -53,9 +59,9 @@ export default function SeceondarySideBar() {
           ))}
         </div>
       </div>
-      <div className="w-full text-center">
-        <p className="text-gray-400 mb-3 text-sm uppercase">Invitations</p>
-        <div className="pendingfriends w-full h-56 overflow-auto space-y-3 mb-3">
+      <div className="w-full text-center h-[20%]">
+        <p className="text-gray-400  text-sm uppercase">Invitations</p>
+        <div className="pendingfriends w-full  overflow-auto space-y-3 mb-3">
           {inviteUser.map((IN: ICInvitation) => (
             <UserBox
               key={IN._id + "ad"}
