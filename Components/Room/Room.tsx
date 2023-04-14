@@ -11,7 +11,7 @@ export default function Room() {
       className={classNames(
         "bg-dark fixed z-10 flex flex-col",
         isMinimized
-          ? "w-[40%] h-[55vh] bottom-0 right-0 "
+          ? " w-full h-full sm:w-[40%] sm:h-[55vh] bottom-0 right-0 "
           : "w-full left-0 h-[100vh] top-0 "
       )}
     >
