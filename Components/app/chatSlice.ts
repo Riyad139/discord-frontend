@@ -68,10 +68,15 @@ const chatSlice = createSlice({
     setChatMessages(state, acction) {
       state.messages = acction.payload;
     },
+    setResetChat(state) {
+      state.ChatDetails = null;
+      state.ChatType = null;
+      state.messages = null;
+    },
   },
 });
 
-export const { setChatDetails, setChatMessages, setChatType } =
+export const { setChatDetails, setChatMessages, setChatType, setResetChat } =
   chatSlice.actions;
 
 export default chatSlice.reducer;
