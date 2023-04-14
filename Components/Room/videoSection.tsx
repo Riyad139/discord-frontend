@@ -23,15 +23,22 @@ export default function VideoSection() {
     (state: IState) => state.room.remoteStreams
   );
   const localStream = useSelector((state: IState) => state.room.localStram);
+  const isScreenShare = useSelector(
+    (state: IState) => state.room.isScreensharingActive
+  );
+  const screenShareStream = useSelector(
+    (state: IState) => state.room.screenSharingStream
+  );
   const videoRef = useRef<HTMLMediaElement>();
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.srcObject = localStream;
+      if (!isScreenShare) videoRef.current.srcObject = localStream;
+      else videoRef.current.srcObject = screenShareStream;
       videoRef.current.onloadeddata = () => {
         videoRef.current?.play();
       };
     }
-  }, [localStream]);
+  }, [localStream, isScreenShare, screenShareStream]);
 
   return (
     <div className="h-[90%]  flex flex-wrap w-full">
