@@ -6,7 +6,7 @@ export default function NavBar() {
   const chatInfo = useSelector((state: IState) => state.chat);
 
   return (
-    <div className="w-full flex justify-between items-center px-5 bg-lightGray h-16 border-b-2 border-dark">
+    <div className=" flex justify-between items-center px-5 bg-lightGray h-[7%] border-b-2 border-dark">
       {chatInfo.ChatType && chatInfo.ChatDetails && (
         <p className="text-gray-300">@{chatInfo.ChatDetails?.username}</p>
       )}
